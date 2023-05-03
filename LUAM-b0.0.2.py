@@ -118,7 +118,6 @@ def checkAutoUpdate():
                 print(msg(16,globLang))
             else:
                 os.system('cls')
-                print(msg(0, globLang))
                 start()
     check = input('>> ')
     if iToF('no', check):
