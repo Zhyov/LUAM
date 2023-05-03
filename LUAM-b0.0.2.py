@@ -1,15 +1,27 @@
 import random, os, requests
 globLang = 'no-language'
-ver = 'beta v0.0.1'
+ver = 'beta v0.0.2'
 hapVer = requests.get("https://api.github.com/repos/LukeBlack952/HAP/releases/latest").json()['name'].replace('HAP v', '')
-fullRelease = None
+luamVer = requests.get("https://api.github.com/repos/LukeBlack952/LUAM/releases/latest").json()['name'].replace('LUAM ', '').replace('v', '')
+hapFullRel = None
+isBeta = None
+itr = 0
 if '.' in hapVer.replace('0.', ''):
-    fullRelease = False
+    hapFullRel = False
 else:
-    fullRelease = True
+    hapFullRel = True
+if 'beta' in luamVer:
+    luamVer = luamVer.replace('eta ', '')
+    isBeta = True
+else:
+    isBeta = False
 if not os.path.exists('apps'):
     os.mkdir('apps')
 def start():
+    global itr
+    if itr == 0:
+        print(msg(0, globLang))
+        itr += 1
     print(msg(2, globLang))
     check = input('>> ')
     if iToF('set.app', check):
@@ -57,18 +69,18 @@ def apps():
                     else:
                         os.system('cls')
                         print(msg(1, globLang))
-        else:
-            print(msg(6, globLang))
-            check = input('>> ')
-            if iToF('yes', check):
-                os.system('cls')
-                install('HAP')
-            elif iToF('back', check):
-                os.system('cls')
-                apps()
             else:
-                os.system('cls')
-                print(msg(1, globLang))
+                print(msg(6, globLang))
+                check = input('>> ')
+                if iToF('yes', check):
+                    os.system('cls')
+                    install('HAP')
+                elif iToF('back', check):
+                    os.system('cls')
+                    apps()
+                else:
+                    os.system('cls')
+                    print(msg(1, globLang))
     elif iToF('back', check):
         os.system('cls')
         start()
@@ -92,6 +104,37 @@ def install(app):
         else:
             os.system('cls')
             print(msg(1, globLang))
+    else:
+        return
+def checkAutoUpdate():
+    print(msg(17,globLang))
+    dir = os.listdir()
+    for i in dir:
+        fil = os.path.splitext(i)[0]
+        if 'LUAM' in fil:
+            curVer = i.replace('LUAM-', '').replace('.py', '')
+            if not luamVer in fil:
+                os.system('cls')
+                print(msg(16,globLang))
+            else:
+                os.system('cls')
+                print(msg(0, globLang))
+                start()
+    check = input('>> ')
+    if iToF('no', check):
+        os.system('cls')
+        start()
+    elif iToF('yes', check):
+        print(msg(14, globLang))
+        os.remove(i)
+        print(msg(8, globLang))
+        luamLink = 'https://github.com/LukeBlack952/LUAM/releases/latest/download/LUAM-' + luamVer + '.py'
+        print(msg(9, globLang))
+        luamReq = requests.get(luamLink, allow_redirects=True)
+        print(msg(10, globLang))
+        open('LUAM-' + luamVer + '.py', 'wb').write(luamReq.content)
+        print(msg(11, globLang))
+        exit()
     else:
         return
 def update(app):
@@ -152,7 +195,7 @@ def settings():
         print(msg(1, globLang))
     settings()
 def lang(sm):
-    global globLang
+    global globLang, itr
     if sm == False:
         print('\nSelect a language:\n1 - en (English)\n2 - es (Español)\n3 - ru (Русский)')
         check = input('>> ')
@@ -171,10 +214,16 @@ def lang(sm):
         check = input('>> ')
         if check == '1' or check.lower() == 'english' or check.lower() == 'en':
             globLang = 'en'
+            if itr == 1:
+                itr -= 1
         elif check == '2' or check.lower() == 'español' or check.lower() == 'es':
             globLang = 'es'
+            if itr == 1:
+                itr -= 1
         elif check == '3' or check.lower() == 'русский' or check.lower() == 'ru':
             globLang = 'ru'
+            if itr == 1:
+                itr -= 1
         elif check.lower() == 'back':
             os.system('cls')
             settings()
@@ -183,8 +232,10 @@ def lang(sm):
             print('\nSorry, that is not an option. Did you spell it correctly?')
             lang(True)
     os.system('cls')
-    print(msg(0, globLang))
-    start()
+    if sm == False:
+        checkAutoUpdate()
+    else:
+        start()
 def credits():
     print(msg(21, globLang))
     print(msg(7, globLang))
@@ -261,6 +312,10 @@ def msg(type, lang):
             return 'Removing...'
         elif int(type) == 15:
             return '\nThis application is outdated. Do you wish to update it?\n- Yes\n- No\n- Back'
+        elif int(type) == 16:
+            return '\nLUAM is outdated. Do you wish to update it?\n- Yes\n- No'
+        elif int(type) == 17:
+            return 'Checking for updates...'
         elif int(type) == 21:
             return '\nCredits:\n- Code: Luke\n- Translations:\n-- English: Luke\n-- Spanish: Luke\n-- Russian: DeepL Translate\n- Ideas: Luke'
         elif int(type) == 22:
@@ -298,6 +353,10 @@ def msg(type, lang):
             return 'Eliminando...'
         elif int(type) == 15:
             return '\nEsta aplicación está desactualizada. ¿Desea actualizarla?\n- Sí\n- No\n- Volver'
+        elif int(type) == 16:
+            return '\nLUAM está desactualizado. ¿Desea actualizarlo?\n- Sí\n- No'
+        elif int(type) == 17:
+            return 'Buscando actualizaciones...'
         elif int(type) == 21:
             return '\nCréditos:\n- Código: Luke\n- Traducciones:\n-- Inglés: Luke\n-- Español: Luke\n-- Ruso: DeepL Traductor\n- Ideas: Luke'
         elif int(type) == 22:
@@ -335,8 +394,14 @@ def msg(type, lang):
             return 'Удаляя...'
         elif int(type) == 15:
             return '\nЭто приложение устарело. Вы хотите обновить его?\n- Да\n- Нет\n- Назад'
+        elif int(type) == 16:
+            return '\nLUAM устарел. Хотите ли вы обновить его?\n- Да\n- Нет'
+        elif int(type) == 17:
+            return 'Проверяем обновления...'
         elif int(type) == 21:
             return '\nКредиты:\n- Код: Luke\n- Переводы:\n-- Английский: Luke\n-- Испанский: Luke\n-- Русский: DeepL Translate\n- Идеи: Luke'
         elif int(type) == 22:
             return '\nЧто бы вы хотели сделать?\n- Настройки\n- Кредиты\n- Назад'
+    elif lang == 'no-language':
+        return 'Language Error'
 lang(False)
