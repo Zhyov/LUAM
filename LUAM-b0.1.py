@@ -1,8 +1,10 @@
-import random, os, requests
+import random, os, requests, time
 globLang = 'no-language'
-ver = 'beta v0.0.2'
-hapVer = requests.get("https://api.github.com/repos/LukeBlack952/HAP/releases/latest").json()['name'].replace('HAP v', '')
-luamVer = requests.get("https://api.github.com/repos/LukeBlack952/LUAM/releases/latest").json()['name'].replace('LUAM ', '').replace('v', '')
+ver = 'beta v0.1'
+hapVer = requests.get("https://api.github.com/repos/LukeBlack952/HAP/releases/latest").json()
+hapVer = hapVer['tag_name']
+luamVer = requests.get("https://api.github.com/repos/LukeBlack952/LUAM/releases/latest").json()
+luamVer = luamVer['tag_name']
 hapFullRel = None
 isBeta = None
 itr = 0
@@ -37,7 +39,15 @@ def start():
         print(msg(1, globLang))
     start()
 def apps():
-    print(msg(5, globLang))
+    dir = os.listdir('apps')
+    for i in dir:
+        fil = os.path.splitext(i)[0]
+        if 'HAP' in fil:
+            curVer = i.replace('HAP-', '').replace('.py', '')
+            if hapVer in fil:
+                print(msg(5, globLang))
+            else:
+                print(msg(23, globLang))
     check = input('>> ')
     if iToF('app.hap', check):
         os.system('cls')
@@ -319,6 +329,8 @@ def msg(type, lang):
             return '\nCredits:\n- Code: Luke\n- Translations:\n-- English: Luke\n-- Spanish: Luke\n-- Russian: DeepL Translate\n- Ideas: Luke'
         elif int(type) == 22:
             return '\nWhat  would you like to do?\n- Settings\n- Credits\n- Back'
+        elif int(type) == 23:
+            return '\nWhat application would you like to check?\n- HAP (Outdated)\n- Back'
     elif lang == 'es':
         if int(type) == 0:
             return '\n### Bienvenido a LUAM ' + ver + '! ###'
@@ -360,6 +372,8 @@ def msg(type, lang):
             return '\nCréditos:\n- Código: Luke\n- Traducciones:\n-- Inglés: Luke\n-- Español: Luke\n-- Ruso: DeepL Traductor\n- Ideas: Luke'
         elif int(type) == 22:
             return '\n¿Qué te gustaría hacer?\n- Ajustes\n- Créditos\n- Volver'
+        elif int(type) == 23:
+            return '\n¿Qué aplicación le gustaría comprobar?\n- HAP (Desactualizado)\n- Volver'
     elif lang == 'ru':
         if int(type) == 0:
             return '\n### Добро пожаловать в LUAM ' + ver + '! ###'
@@ -401,6 +415,8 @@ def msg(type, lang):
             return '\nКредиты:\n- Код: Luke\n- Переводы:\n-- Английский: Luke\n-- Испанский: Luke\n-- Русский: DeepL Translate\n- Идеи: Luke'
         elif int(type) == 22:
             return '\nЧто бы вы хотели сделать?\n- Настройки\n- Кредиты\n- Назад'
+        elif int(type) == 23:
+            return '\nКакое приложение вы хотите проверить?\n- HAP (Outdated)\n- Назад'
     elif lang == 'no-language':
         return 'Language Error'
 lang(False)
