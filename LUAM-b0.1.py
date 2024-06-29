@@ -58,7 +58,7 @@ def apps():
                 curVer = i.replace('HAP-', '').replace('.py', '')
                 if hapVer in fil:
                     os.system('cls')
-                    os.system('apps\HAP-' + curVer + '.py')
+                    os.system('apps/HAP-' + curVer + '.py')
                     os.system('cls')
                     apps()
                 else:
@@ -70,7 +70,7 @@ def apps():
                         update('HAP')
                     elif iToF('no', check):
                         os.system('cls')
-                        os.system('apps\HAP-' + curVer + '.py')
+                        os.system('apps/HAP-' + curVer + '.py')
                         os.system('cls')
                         apps()
                     elif iToF('back', check):
