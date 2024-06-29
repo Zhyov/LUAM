@@ -1,9 +1,9 @@
 import random, os, requests, time
 globLang = 'no-language'
 ver = 'beta v0.1'
-hapVer = requests.get("https://api.github.com/repos/LukeBlack952/HAP/releases/latest").json()
+hapVer = requests.get("https://api.github.com/repos/Zhyov/HAP/releases/latest").json()
 hapVer = hapVer['tag_name']
-luamVer = requests.get("https://api.github.com/repos/LukeBlack952/LUAM/releases/latest").json()
+luamVer = requests.get("https://api.github.com/repos/Zhyov/LUAM/releases/latest").json()
 luamVer = luamVer['tag_name']
 hapFullRel = None
 isBeta = None
@@ -100,7 +100,7 @@ def apps():
 def install(app):
     if app == 'HAP':
         print(msg(8, globLang))
-        hapLink = 'https://github.com/LukeBlack952/HAP/releases/latest/download/HAP-' + hapVer + '.py'
+        hapLink = 'https://github.com/Zhyov/HAP/releases/latest/download/HAP-' + hapVer + '.py'
         print(msg(9, globLang))
         hapReq = requests.get(hapLink, allow_redirects=True)
         print(msg(10, globLang))
@@ -137,7 +137,7 @@ def checkAutoUpdate():
         print(msg(14, globLang))
         os.remove(i)
         print(msg(8, globLang))
-        luamLink = 'https://github.com/LukeBlack952/LUAM/releases/latest/download/LUAM-' + luamVer + '.py'
+        luamLink = 'https://github.com/Zhyov/LUAM/releases/latest/download/LUAM-' + luamVer + '.py'
         print(msg(9, globLang))
         luamReq = requests.get(luamLink, allow_redirects=True)
         print(msg(10, globLang))
@@ -158,7 +158,7 @@ def update(app):
                 os.remove('apps/' + i)
         print(msg(11, globLang))
         print(msg(8, globLang))
-        hapLink = 'https://github.com/LukeBlack952/HAP/releases/latest/download/HAP-' + hapVer + '.py'
+        hapLink = 'https://github.com/Zhyov/HAP/releases/latest/download/HAP-' + hapVer + '.py'
         print(msg(9, globLang))
         hapReq = requests.get(hapLink, allow_redirects=True)
         print(msg(10, globLang))
